@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Дария Шайхуллина](https://up.htmlacademy.ru/javascript/24/user/1583987).
-* Наставник: Максим Прусаков.
+* Наставник:[Максим Прусаков](https://htmlacademy.ru/profile/hikikomori).
 
 ---
 
