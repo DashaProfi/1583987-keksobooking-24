@@ -4,23 +4,19 @@ function getRandomIntFromRange(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     result = Math.floor(Math.random() * (max - min + 1)) + min;
-  } else {
-    result = 'Введите корректное значение диапазона';
+    return result;
   }
-  return result;
+  throw new Error('Введите корректное значение диапазона');
 }
-getRandomIntFromRange(7, 9);
+getRandomIntFromRange(1, 5);
 
 
 function getRandomGeoCoordinates(min, max, num) {
   let result;
   if (min >= 0 && max > min) {
-    // min = Math.ceil(min);
-    // max = Math.floor(max);
-    result = +(Math.random() * (max - min + 1) + min).toFixed(num);
-  } else {
-    result = 'Введите корректное значение диапазона';
+    result = +(Math.random() * (max - min) + min).toFixed(num);
+    return result;
   }
-  return result;
+  throw new Error('Введите корректное значение диапазона');
 }
-getRandomGeoCoordinates(1.89, 8.456, 3);
+getRandomGeoCoordinates(1, 1.3, 2);
