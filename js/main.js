@@ -1,26 +1,3 @@
-// function getRandomIntFromRange(min, max) {
-//   let result;
-//   if (min >= 0 && max > min) {
-//     min = Math.ceil(min);
-//     max = Math.floor(max);
-//     result = Math.floor(Math.random() * (max - min + 1)) + min;
-//     return result;
-//   }
-//   throw new Error('Введите корректное значение диапазона');
-// }
-// getRandomIntFromRange(1, 5);
-
-
-// function getRandomGeoCoordinates(min, max, num) {
-//   let result;
-//   if (min >= 0 && max > min) {
-//     result = +(Math.random() * (max - min) + min).toFixed(num);
-//     return result;
-//   }
-//   throw new Error('Введите корректное значение диапазона');
-// }
-// getRandomGeoCoordinates(1, 1.3, 2);
-
 function getRandomPositiveInteger(a, b) {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
@@ -37,10 +14,6 @@ function getRandomPositiveFloat(a, b, digits = 1) {
 }
 
 
-const AUTHOR = {
-  avatar: 'img/avatars/user{{xx}}.png',
-};
-
 const OFFER = {
   title: 'Дом',
   address: ['lat', 'lng'],
@@ -53,12 +26,6 @@ const OFFER = {
   features: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
   description: 'Уютная вилла на берегу',
   photos: ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'],
-};
-
-
-const LOCATE = {
-  lat: '',
-  lng: '',
 };
 
 const SIMILAR_ANNOUNCEMENT_COUNT = 10;
@@ -74,10 +41,16 @@ const createRandomAnnouncement = () => {
   const randomGuests = getRandomPositiveInteger(1, 10);
   const randomCheckinIndex = getRandomPositiveInteger(0, OFFER.checkin.length - 1);
   const randomCheckoutIndex = getRandomPositiveInteger(0, OFFER.checkout.length - 1);
-  const randomFeaturesIndex = getRandomPositiveInteger(0, OFFER.features.length - 1);
-  const randomPhotosIndex = getRandomPositiveInteger(0, OFFER.photos.length - 1);
-  const randomLat = getRandomPositiveFloat(35.65000, 35.70000, digits = 5);
-  const randomLng = getRandomPositiveFloat(139.70000, 139.80000, digits = 5);
+  const randomFeatures1 = getRandomPositiveInteger(0, OFFER.features.length - 1);
+  const randomFeatures2 = getRandomPositiveInteger(0, OFFER.features.length - 1);
+  const randomFeaturesMin = Math.min(randomFeatures1, randomFeatures2);
+  const randomFeaturesMax = Math.max(randomFeatures1, randomFeatures2) + 1;
+  const randomPhotos1 = getRandomPositiveInteger(0, OFFER.photos.length - 1);
+  const randomPhotos2 = getRandomPositiveInteger(0, OFFER.photos.length - 1);
+  const randomPhotosMin = Math.min(randomPhotos1, randomPhotos2);
+  const randomPhotosMax = Math.max(randomPhotos1, randomPhotos2) + 1;
+  const randomLat = getRandomPositiveFloat(35.65000, 35.70000, 5);
+  const randomLng = getRandomPositiveFloat(139.70000, 139.80000, 5);
 
 
   return {
@@ -93,9 +66,9 @@ const createRandomAnnouncement = () => {
       guests: randomGuests,
       checkin: OFFER.checkin[randomCheckinIndex],
       checkout: OFFER.checkout[randomCheckoutIndex],
-      features: OFFER.features[randomFeaturesIndex],
+      features: OFFER.features.slice(randomFeaturesMin, randomFeaturesMax),
       description: OFFER.description,
-      photos: OFFER.photos[randomPhotosIndex],
+      photos: OFFER.photos.slice(randomPhotosMin, randomPhotosMax),
     },
     locate: {
       lat: randomLat,
@@ -105,7 +78,8 @@ const createRandomAnnouncement = () => {
 };
 
 
-const similarAnnouncements = Array.from({
-  length: SIMILAR_ANNOUNCEMENT_COUNT
+Array.from({
+  length: SIMILAR_ANNOUNCEMENT_COUNT,
 }, createRandomAnnouncement);
-console.log('newArrDasha', similarAnnouncements);
+
+
