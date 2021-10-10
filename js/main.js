@@ -3,3 +3,5 @@ import { SIMILAR_ANNOUNCEMENT_COUNT, createRandomAnnouncement } from './createRa
 Array.from({
   length: SIMILAR_ANNOUNCEMENT_COUNT,
 }, createRandomAnnouncement);
+
+
