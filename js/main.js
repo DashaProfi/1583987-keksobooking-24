@@ -13,7 +13,6 @@ function getRandomPositiveFloat(a, b, digits = 1) {
   return result.toFixed(digits);
 }
 
-
 const OFFER = {
   title: 'Дом',
   address: ['lat', 'lng'],
@@ -29,33 +28,51 @@ const OFFER = {
 };
 
 const SIMILAR_ANNOUNCEMENT_COUNT = 10;
+const NUMBER1 = 0;
+const NUMBER2 = 10;
+const NUMBER3 = 1;
+const NUMBER4 = 35.65000;
+const NUMBER5 = 35.70000;
+const NUMBER9 = 5;
+const NUMBER6 = 139.70000;
+const NUMBER7 = 139.80000;
+const NUMBER8 = 100000;
 
-const createRandomAnnouncement = () => {
-  let randomAvatarIndex = getRandomPositiveInteger(1, 10);
-  if (randomAvatarIndex < 10) {
-    randomAvatarIndex = `0${randomAvatarIndex}`;
+const randomArr = [];
+
+for (let i = 0; i < 10; i++) {
+  let randomAvatar = getRandomPositiveInteger(NUMBER3, NUMBER2);
+  randomAvatar = `${randomAvatar}`.padStart(2, '0');
+  if (!randomArr.includes(randomAvatar)) {
+    randomArr.push(randomAvatar);
+  } else {
+    i--;
   }
-  const randomTypeIndex = getRandomPositiveInteger(0, OFFER.type.length - 1);
-  const randomRooms = getRandomPositiveInteger(1, 10);
-  const randomPrice = getRandomPositiveInteger(0, 100000);
-  const randomGuests = getRandomPositiveInteger(1, 10);
-  const randomCheckinIndex = getRandomPositiveInteger(0, OFFER.checkin.length - 1);
-  const randomCheckoutIndex = getRandomPositiveInteger(0, OFFER.checkout.length - 1);
-  const randomFeatures1 = getRandomPositiveInteger(0, OFFER.features.length - 1);
-  const randomFeatures2 = getRandomPositiveInteger(0, OFFER.features.length - 1);
+}
+
+let index = 0;
+const createRandomAnnouncement = () => {
+  const randomTypeIndex = getRandomPositiveInteger(NUMBER1, OFFER.type.length - 1);
+  const randomRooms = getRandomPositiveInteger(NUMBER3, NUMBER2);
+  const randomPrice = getRandomPositiveInteger(NUMBER1, NUMBER8);
+  const randomGuests = getRandomPositiveInteger(NUMBER3, NUMBER2);
+  const randomCheckinIndex = getRandomPositiveInteger(NUMBER1, OFFER.checkin.length - 1);
+  const randomCheckoutIndex = getRandomPositiveInteger(NUMBER1, OFFER.checkout.length - 1);
+  const randomFeatures1 = getRandomPositiveInteger(NUMBER1, OFFER.features.length - 1);
+  const randomFeatures2 = getRandomPositiveInteger(NUMBER1, OFFER.features.length - 1);
   const randomFeaturesMin = Math.min(randomFeatures1, randomFeatures2);
   const randomFeaturesMax = Math.max(randomFeatures1, randomFeatures2) + 1;
-  const randomPhotos1 = getRandomPositiveInteger(0, OFFER.photos.length - 1);
-  const randomPhotos2 = getRandomPositiveInteger(0, OFFER.photos.length - 1);
+  const randomPhotos1 = getRandomPositiveInteger(NUMBER1, OFFER.photos.length - 1);
+  const randomPhotos2 = getRandomPositiveInteger(NUMBER1, OFFER.photos.length - 1);
   const randomPhotosMin = Math.min(randomPhotos1, randomPhotos2);
   const randomPhotosMax = Math.max(randomPhotos1, randomPhotos2) + 1;
-  const randomLat = getRandomPositiveFloat(35.65000, 35.70000, 5);
-  const randomLng = getRandomPositiveFloat(139.70000, 139.80000, 5);
+  const randomLat = getRandomPositiveFloat(NUMBER4, NUMBER5, NUMBER9);
+  const randomLng = getRandomPositiveFloat(NUMBER6, NUMBER7, NUMBER9);
 
 
   return {
     author: {
-      avatar: `img/avatars/user${randomAvatarIndex}.png`,
+      avatar: `img/avatars/user${randomArr[index++]}.png`,
     },
     offer: {
       title: OFFER.title,
@@ -78,8 +95,10 @@ const createRandomAnnouncement = () => {
 };
 
 
-Array.from({
-  length: SIMILAR_ANNOUNCEMENT_COUNT,
-}, createRandomAnnouncement);
-
-
+// Array.from({
+//   length: SIMILAR_ANNOUNCEMENT_COUNT,
+// }, createRandomAnnouncement);
+console.log(
+  Array.from({
+    length: SIMILAR_ANNOUNCEMENT_COUNT,
+  }, createRandomAnnouncement));
