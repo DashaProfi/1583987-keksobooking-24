@@ -4,4 +4,3 @@ Array.from({
   length: SIMILAR_ANNOUNCEMENT_COUNT,
 }, createRandomAnnouncement);
 
-
