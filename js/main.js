@@ -1,4 +1,3 @@
-import './popup.js';
 import { SIMILAR_ANNOUNCEMENT_COUNT, createRandomAnnouncement } from './createRandomAnnouncement.js';
 import { getPopupAnnouncements } from './popup.js';
 

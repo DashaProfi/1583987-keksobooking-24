@@ -1,6 +1,3 @@
-// import { createRandomAnnouncement } from './createRandomAnnouncement.js';
-
-// const map = document.querySelector('#map-canvas');
 const templateFragment = document.querySelector('#card')
   .content
   .querySelector('.popup');
@@ -22,9 +19,9 @@ const getPopupAnnouncements = (element) => {
     popupPrice = announcementElement.querySelector('.popup__text--price'),
     popupCapacity = announcementElement.querySelector('.popup__text--capacity'),
     popupTime = announcementElement.querySelector('.popup__text--time'),
-    popupPhoto = announcementElement.querySelector('.popup__photo'),
     popupDescription = announcementElement.querySelector('.popup__description'),
-    popupAvatar = announcementElement.querySelector('.popup__avatar');
+    popupAvatar = announcementElement.querySelector('.popup__avatar'),
+    popupPhotosContaner = announcementElement.querySelector('.popup__photos');
 
   popupTitle.textContent = element.offer.title;
   if (!element.offer.title) { popupTitle.remove(); }
@@ -38,8 +35,6 @@ const getPopupAnnouncements = (element) => {
   if (!element.offer.rooms || !element.offer.guests) { popupCapacity.remove(); }
   popupTime.textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
   if (!element.offer.checkin || !element.offer.checkout) { popupTime.remove(); }
-  popupPhoto.src = element.offer.photos;
-  if (!element.offer.photos) { popupPhoto.remove(); }
   popupDescription.textContent = element.offer.description;
   if (!element.offer.description) { popupDescription.remove(); }
   popupAvatar.src = element.author.avatar;
@@ -57,9 +52,21 @@ const getPopupAnnouncements = (element) => {
     if (!element.offer.features) { announcementElement.querySelector('.popup__features').style.display = 'none'; }
   },
   );
+  popupPhotosContaner.innerHTML = '';
+  element.offer.photos.forEach((photo) => {
+    const userImage = document.createElement('img');
+    userImage.src = photo;
+    userImage.classList.add('popup__photo');
+    userImage.width = '45';
+    userImage.height = '40';
+    userImage.alt = 'Фотография жилья';
+    popupPhotosContaner.appendChild(userImage);
+    popupPhotosContaner.appendChild(userImage);
+  });
 
   return announcementElement;
 };
 
 
 export { getPopupAnnouncements };
+
