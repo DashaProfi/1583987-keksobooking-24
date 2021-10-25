@@ -1,7 +1,7 @@
 import { getRandomPositiveInteger, getRandomPositiveFloat } from './util.js';
 
 const OFFER = {
-  title: 'Дом',
+  title: 'Вилла',
   address: ['lat', 'lng'],
   price: '',
   type: ['palace', 'flat', 'house', 'bungalow', 'hotel'],
