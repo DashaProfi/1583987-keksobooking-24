@@ -39,18 +39,19 @@ userRoomNumberContaner.addEventListener('change', () => {
 });
 
 
-userCapacitysContainer.addEventListener('change', () => {
-  userRoomNumber.forEach((el) => {
-    if (Number(el.value) <= Number(userCapacitysContainer.value) && Number(el.value) !== MIN_ROOM_NUMBER) {
-      el.removeAttribute('disabled');
-    } else {
-      el.setAttribute('disabled', 'disabled');
-    }
-    if (Number(userCapacitysContainer.value) === MIN_ROOM_NUMBER) {
-      el.setAttribute('disabled', 'disabled');
-      userRoomNumber[3].removeAttribute('disabled');
-    }
+userRoomNumberContaner.addEventListener('change', () => {
+  if (Number(userRoomNumberContaner.value) < Number(userCapacitysContainer.value)) {
+    userRoomNumberContaner.setCustomValidity('Комнат не хватает!');
+  } else if (Number(userCapacitysContainer.value) === MIN_ROOM_NUMBER && Number(userRoomNumberContaner.value) !== MAX_ROOM_NUMBER) {
+    userRoomNumberContaner.setCustomValidity('Выберите 100 комнат');
+  } else if (Number(userRoomNumberContaner.value) === MAX_ROOM_NUMBER && Number(userCapacitysContainer.value) !== MIN_ROOM_NUMBER) {
+    userRoomNumberContaner.setCustomValidity('100 комнат не для гостей');
+  }
+  else {
+    userRoomNumberContaner.setCustomValidity('');
+  }
 
-  });
-
+  userRoomNumberContaner.reportValidity();
 });
+
+
