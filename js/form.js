@@ -1,7 +1,6 @@
 const userPrice = document.querySelector('#price'),
   userType = document.querySelector('#type'),
   userRoomNumberContaner = document.querySelector('#room_number'),
-  userRoomNumber = document.querySelectorAll('#room_number>option'),
   userCapacitysContainer = document.querySelector('#capacity'),
   userCapacitys = document.querySelectorAll('#capacity>option');
 const MAX_ROOM_NUMBER = 100;
