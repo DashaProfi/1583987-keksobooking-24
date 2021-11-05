@@ -5,7 +5,8 @@ const userPrice = document.querySelector('#price'),
   userCapacitys = document.querySelectorAll('#capacity>option');
 const MAX_ROOM_NUMBER = 100;
 const MIN_ROOM_NUMBER = 0;
-
+const adForm = document.querySelector('.ad-form');
+const mapFilter = document.querySelector('.map__filters');
 
 const userTypeList = {
   bungalow: '0',
@@ -14,6 +15,36 @@ const userTypeList = {
   house: '5000',
   palace: '10000',
 };
+
+const inactivateAdForm = () => {
+  adForm.classList.add('ad-form--disabled');
+  adForm.querySelectorAll('fieldset').forEach((fieldset) => {
+    fieldset.setAttribute('disabled', 'disabled');
+  });
+};
+inactivateAdForm();
+const inactivateMapFilter = () => {
+  mapFilter.classList.add('.map__filters--disabled');
+  for (let i = 0; i < mapFilter.children.length; i++) {
+    mapFilter.children[i].setAttribute('disabled', 'disabled');
+  }
+};
+inactivateMapFilter();
+const activateAdForm = () => {
+  adForm.classList.remove('ad-form--disabled');
+  adForm.querySelectorAll('fieldset').forEach((fieldset) => {
+    fieldset.removeAttribute('disabled');
+  });
+};
+activateAdForm();
+
+const activateMapFilter = () => {
+  mapFilter.classList.remove('.map__filters--disabled');
+  for (let i = 0; i < mapFilter.children.length; i++) {
+    mapFilter.children[i].removeAttribute('disabled');
+  }
+};
+activateMapFilter();
 
 userType.addEventListener('change', () => {
   userPrice.setAttribute('min', userTypeList[userType.value]);
