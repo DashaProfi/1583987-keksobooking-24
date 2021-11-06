@@ -7,6 +7,8 @@ const MAX_ROOM_NUMBER = 100;
 const MIN_ROOM_NUMBER = 0;
 const adForm = document.querySelector('.ad-form');
 const mapFilter = document.querySelector('.map__filters');
+const userTimeinContainer = document.querySelector('#timein'),
+  userTimeoutContainer = document.querySelector('#timeout');
 
 const userTypeList = {
   bungalow: '0',
@@ -84,4 +86,12 @@ userRoomNumberContaner.addEventListener('change', () => {
   userRoomNumberContaner.reportValidity();
 });
 
+userTimeinContainer.addEventListener('change', () => {
+  userTimeoutContainer.value = userTimeinContainer.value;
+
+});
+userTimeoutContainer.addEventListener('change', () => {
+  userTimeinContainer.value = userTimeoutContainer.value;
+
+});
 
