@@ -57,10 +57,11 @@ announcements.forEach((card) => {
     iconAnchor: [20, 40],
   });
 
-  const marker = L.marker({
-    lat: card.locate.lat,
-    lng: card.locate.lng,
-  },
+  const marker = L.marker(
+    {
+      lat: card.locate.lat,
+      lng: card.locate.lng,
+    },
     {
       icon,
     },
