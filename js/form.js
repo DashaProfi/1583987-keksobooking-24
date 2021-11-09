@@ -1,5 +1,3 @@
-// import { getLatLng } from './map.js';
-
 const userPrice = document.querySelector('#price'),
   userType = document.querySelector('#type'),
   userRoomNumberContaner = document.querySelector('#room_number'),
@@ -11,7 +9,6 @@ const adForm = document.querySelector('.ad-form');
 const mapFilter = document.querySelector('.map__filters');
 const userTimeinContainer = document.querySelector('#timein'),
   userTimeoutContainer = document.querySelector('#timeout');
-// const userAddress = document.querySelector('#address');
 
 const userTypeList = {
   bungalow: '0',
@@ -21,7 +18,6 @@ const userTypeList = {
   palace: '10000',
 };
 
-// userAddress.value = getLatLng();
 
 const inactivateAdForm = () => {
   adForm.classList.add('ad-form--disabled');
@@ -43,7 +39,6 @@ const activateAdForm = () => {
     fieldset.removeAttribute('disabled');
   });
 };
-// activateAdForm();
 
 const activateMapFilter = () => {
   mapFilter.classList.remove('.map__filters--disabled');
@@ -51,9 +46,6 @@ const activateMapFilter = () => {
     mapFilter.children[i].removeAttribute('disabled');
   }
 };
-// activateMapFilter();
-
-// userAddress.value = getLatLng();
 
 userType.addEventListener('change', () => {
   userPrice.setAttribute('min', userTypeList[userType.value]);

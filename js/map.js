@@ -5,6 +5,15 @@ import { getPopupAnnouncements } from './popup.js';
 const userAddress = document.querySelector('#address');
 const TOKYO_CENTER_LAT = 35.6895;
 const TOKYO_CENTER_LNG = 139.6917;
+const MAIN_PIN_ICON_HEIGHT = 52;
+const MAIN_PIN_ICON_WIDTH = 52;
+const MAIN_PIN_ANCHOR_X = 26;
+const MAIN_PIN_ANCHOR_Y = 52;
+const PIN_ICON_HEIGHT = 40;
+const PIN_ICON_WIDTH = 40;
+const PIN_ANCHOR_X = 20;
+const PIN_ANCHOR_Y = 40;
+const ZOOM_DEFAULT = 12;
 
 userAddress.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
 
@@ -16,7 +25,7 @@ const map = L.map('map-canvas')
   .setView({
     lat: TOKYO_CENTER_LAT,
     lng: TOKYO_CENTER_LNG,
-  }, 10);
+  }, ZOOM_DEFAULT);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -27,8 +36,8 @@ L.tileLayer(
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: [MAIN_PIN_ICON_WIDTH, MAIN_PIN_ICON_HEIGHT],
+  iconAnchor: [MAIN_PIN_ANCHOR_X, MAIN_PIN_ANCHOR_Y],
 });
 
 const mainPinMarker = L.marker(
@@ -46,15 +55,15 @@ const mainPinMarker = L.marker(
 mainPinMarker.addTo(map);
 mainPinMarker.on('moveend', (evt) => {
   const userLocation = evt.target.getLatLng();
-  userAddress.value = `${userLocation.lat.toFixed(5)},${userLocation.lng.toFixed(5)}`;
+  userAddress.value = `${userLocation.lat.toFixed(5)}, ${userLocation.lng.toFixed(5)}`;
 });
 
 
 announcements.forEach((card) => {
   const icon = L.icon({
     iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+    iconSize: [PIN_ICON_WIDTH, PIN_ICON_HEIGHT],
+    iconAnchor: [PIN_ANCHOR_X, PIN_ANCHOR_Y],
   });
 
   const marker = L.marker(
