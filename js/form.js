@@ -18,6 +18,7 @@ const userTypeList = {
   palace: '10000',
 };
 
+
 const inactivateAdForm = () => {
   adForm.classList.add('ad-form--disabled');
   adForm.querySelectorAll('fieldset').forEach((fieldset) => {
@@ -38,7 +39,6 @@ const activateAdForm = () => {
     fieldset.removeAttribute('disabled');
   });
 };
-activateAdForm();
 
 const activateMapFilter = () => {
   mapFilter.classList.remove('.map__filters--disabled');
@@ -46,15 +46,13 @@ const activateMapFilter = () => {
     mapFilter.children[i].removeAttribute('disabled');
   }
 };
-activateMapFilter();
 
 userType.addEventListener('change', () => {
   userPrice.setAttribute('min', userTypeList[userType.value]);
   userPrice.placeholder = userTypeList[userType.value];
 });
 
-
-userRoomNumberContaner.addEventListener('change', () => {
+const checkinRooms = () => {
   userCapacitys.forEach((el) => {
     if (Number(el.value) <= Number(userRoomNumberContaner.value) && Number(el.value) !== MIN_ROOM_NUMBER) {
       el.removeAttribute('disabled');
@@ -67,8 +65,11 @@ userRoomNumberContaner.addEventListener('change', () => {
     }
 
   });
+};
 
-});
+checkinRooms();
+
+userRoomNumberContaner.addEventListener('change', checkinRooms);
 
 
 userRoomNumberContaner.addEventListener('change', () => {
@@ -95,3 +96,4 @@ userTimeoutContainer.addEventListener('change', () => {
 
 });
 
+export { activateAdForm, activateMapFilter };
