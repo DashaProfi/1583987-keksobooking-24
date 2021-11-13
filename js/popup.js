@@ -40,30 +40,34 @@ const getPopupAnnouncements = (element) => {
   popupAvatar.src = element.author.avatar;
   if (!element.author.avatar) { popupAvatar.remove(); }
 
-  const features = element.offer.features;
-  const popupFeaturesList = announcementElement.querySelectorAll('.popup__feature');
 
-  popupFeaturesList.forEach((popupFeaturesListItem) => {
-    const isNecessary = features.some((el) => popupFeaturesListItem.classList.contains(`popup__feature--${el}`));
+  if (element.offer.features) {
+    const features = element.offer.features;
 
-    if (!isNecessary) {
-      popupFeaturesListItem.remove();
-    }
-    if (!element.offer.features) { announcementElement.querySelector('.popup__features').style.display = 'none'; }
-  },
-  );
-  popupPhotosContaner.innerHTML = '';
-  element.offer.photos.forEach((photo) => {
-    const userImage = document.createElement('img');
-    userImage.src = photo;
-    userImage.classList.add('popup__photo');
-    userImage.width = '45';
-    userImage.height = '40';
-    userImage.alt = 'Фотография жилья';
-    popupPhotosContaner.appendChild(userImage);
-    popupPhotosContaner.appendChild(userImage);
-  });
+    const popupFeaturesList = announcementElement.querySelectorAll('.popup__feature');
 
+    popupFeaturesList.forEach((popupFeaturesListItem) => {
+      const isNecessary = features.some((el) => popupFeaturesListItem.classList.contains(`popup__feature--${el}`));
+
+      if (!isNecessary) {
+        popupFeaturesListItem.remove();
+      }
+      if (!element.offer.features) { announcementElement.querySelector('.popup__features').style.display = 'none'; }
+    },
+    );
+  }
+  if (element.offer.photos) {
+    popupPhotosContaner.innerHTML = '';
+    element.offer.photos.forEach((photo) => {
+      const userImage = document.createElement('img');
+      userImage.src = photo;
+      userImage.classList.add('popup__photo');
+      userImage.width = '45';
+      userImage.height = '40';
+      userImage.alt = 'Фотография жилья';
+      popupPhotosContaner.appendChild(userImage);
+    });
+  }
   return announcementElement;
 };
 
