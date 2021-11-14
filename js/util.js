@@ -21,14 +21,14 @@ const inactivateAdForm = () => {
     fieldset.setAttribute('disabled', 'disabled');
   });
 };
-// inactivateAdForm();
+
 const inactivateMapFilter = () => {
   mapFilter.classList.add('.map__filters--disabled');
   for (let i = 0; i < mapFilter.children.length; i++) {
     mapFilter.children[i].setAttribute('disabled', 'disabled');
   }
 };
-// inactivateMapFilter();
+
 const activateAdForm = () => {
   adForm.classList.remove('ad-form--disabled');
   adForm.querySelectorAll('fieldset').forEach((fieldset) => {

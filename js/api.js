@@ -1,5 +1,3 @@
-
-
 const getData = (onSuccess, onFail) => {
   fetch('https://24.javascript.pages.academy/keksobooking/data')
     .then((response) => {

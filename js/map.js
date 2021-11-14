@@ -15,6 +15,7 @@ const PIN_ICON_WIDTH = 40;
 const PIN_ANCHOR_X = 20;
 const PIN_ANCHOR_Y = 40;
 const ZOOM_DEFAULT = 12;
+const SIMILAR_ANNOUNCEMENTS_COUNT = 10;
 
 inactivateAdForm();
 inactivateMapFilter();
@@ -64,7 +65,7 @@ mainPinMarker.on('moveend', (evt) => {
 
 
 const onSuccess = (announcements) => {
-  announcements.forEach((card) => {
+  announcements.slice(0, SIMILAR_ANNOUNCEMENTS_COUNT).forEach((card) => {
     const icon = L.icon({
       iconUrl: 'img/pin.svg',
       iconSize: [PIN_ICON_WIDTH, PIN_ICON_HEIGHT],
@@ -132,7 +133,6 @@ const onFail = () => {
   document.body.prepend(div);
   closePopup();
 };
-
 
 getData(onSuccess, onFail);
 

@@ -18,7 +18,9 @@ const userTimeins = document.querySelectorAll('#timein>option');
 const userTimeoutContainer = document.querySelector('#timeout');
 const userTimeouts = document.querySelectorAll('#timeout>option');
 const featuresCheckboxes = document.querySelectorAll('.features__checkbox');
-
+const adFormReset = document.querySelector('.ad-form__reset');
+let success;
+let error;
 
 const userTypeList = {
   bungalow: '0',
@@ -47,14 +49,7 @@ const checkinRooms = () => {
     }
 
   });
-};
 
-checkinRooms();
-
-userRoomNumberContaner.addEventListener('change', checkinRooms);
-
-
-userRoomNumberContaner.addEventListener('change', () => {
   if (Number(userRoomNumberContaner.value) < Number(userCapacitysContainer.value)) {
     userRoomNumberContaner.setCustomValidity('Комнат не хватает!');
   } else if (Number(userCapacitysContainer.value) === MIN_ROOM_NUMBER && Number(userRoomNumberContaner.value) !== MAX_ROOM_NUMBER) {
@@ -67,15 +62,20 @@ userRoomNumberContaner.addEventListener('change', () => {
   }
 
   userRoomNumberContaner.reportValidity();
-});
+};
+
+checkinRooms();
+
+userRoomNumberContaner.addEventListener('change', checkinRooms);
+
+userCapacitysContainer.addEventListener('change', checkinRooms);
 
 userTimeinContainer.addEventListener('change', () => {
   userTimeoutContainer.value = userTimeinContainer.value;
-
 });
+
 userTimeoutContainer.addEventListener('change', () => {
   userTimeinContainer.value = userTimeoutContainer.value;
-
 });
 
 const createSucccessMessage = () => {
@@ -84,18 +84,40 @@ const createSucccessMessage = () => {
   return successMessage;
 };
 
-const closePopupSuccess = () => {
-  const success = document.querySelector('.success');
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      success.remove();
-    }
-  });
-  document.addEventListener('click', (evt) => {
+const closePopupSuccesEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
     evt.preventDefault();
     success.remove();
-  });
+    document.removeEventListener('keydown', closePopupSuccesEscKeydown);
+  }
+};
+const closePopupSuccesEscClick = (evt) => {
+  evt.preventDefault();
+  success.remove();
+  success.removeEventListener('click', closePopupSuccesEscClick);
+};
+const closePopupSuccess = () => {
+  document.addEventListener('keydown', closePopupSuccesEscKeydown);
+  success.addEventListener('click', closePopupSuccesEscClick);
+};
+
+const closePopupErrorEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    error.remove();
+    document.removeEventListener('keydown', closePopupErrorEscKeydown);
+  }
+};
+const closePopupErrorEscClick = (evt) => {
+  evt.preventDefault();
+  error.remove();
+  error.removeEventListener('click', closePopupErrorEscClick);
+};
+const closePopupErrorEscButtonClick = (evt) => {
+  const errorButton = document.querySelector('.error__button');
+  evt.preventDefault();
+  error.remove();
+  errorButton.removeEventListener('click', closePopupErrorEscButtonClick);
 };
 const createErrorMessage = () => {
   const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -103,26 +125,15 @@ const createErrorMessage = () => {
   return errorMessage;
 };
 const closePopupError = () => {
-  const error = document.querySelector('.error');
   const errorButton = document.querySelector('.error__button');
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      error.remove();
-    }
-  });
-  error.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    error.remove();
-  });
-  errorButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    error.remove();
-  });
+  document.addEventListener('keydown', closePopupErrorEscKeydown);
+  error.addEventListener('click', closePopupErrorEscClick);
+  errorButton.addEventListener('click', closePopupErrorEscButtonClick);
 };
 
 const onSuccess = () => {
-  document.body.append(createSucccessMessage());
+  success = createSucccessMessage();
+  document.body.append(success);
   closePopupSuccess();
   userTitle.value = '';
   userAddress.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
@@ -144,7 +155,8 @@ const onSuccess = () => {
   map.closePopup();
 };
 const onError = () => {
-  document.body.append(createErrorMessage());
+  error = createErrorMessage();
+  document.body.append(error);
   closePopupError();
 };
 
@@ -156,5 +168,32 @@ adForm.addEventListener('submit', (evt) => {
     new FormData(evt.target),
   );
 });
+const resetForm = () => {
+  userTitle.value = '';
+  userAddress.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
+  userRoomNumberContaner.value = userRoomNumbers[0].value;
+  userCapacitysContainer.value = userCapacitys[2].value;
+  userType.value = userTypes[1].value;
+  userPrice.value = '';
+  userPrice.placeholder = userTypeList[userType.value];
+  userTimeoutContainer.value = userTimeouts[0].value;
+  userTimeinContainer.value = userTimeins[0].value;
+  featuresCheckboxes.forEach((features) => {
+    features.checked = false;
+  });
+  mainPinMarker.setLatLng({
+    lat: TOKYO_CENTER_LAT,
+    lng: TOKYO_CENTER_LNG,
+  });
+  map.closePopup();
+};
 
+adFormReset.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
+});
+adFormReset.removeEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
+});
 
