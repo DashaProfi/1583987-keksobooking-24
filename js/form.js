@@ -10,6 +10,7 @@ const userPrice = document.querySelector('#price'),
   userCapacitys = document.querySelectorAll('#capacity>option'),
   userTitle = document.querySelector('#title');
 const userAddress = document.querySelector('#address');
+const userComment = document.querySelector('#description');
 const MAX_ROOM_NUMBER = 100;
 const MIN_ROOM_NUMBER = 0;
 const adForm = document.querySelector('.ad-form');
@@ -84,40 +85,40 @@ const createSucccessMessage = () => {
   return successMessage;
 };
 
-const closePopupSuccesEscKeydown = (evt) => {
+const onPopupSuccesEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
     success.remove();
-    document.removeEventListener('keydown', closePopupSuccesEscKeydown);
+    document.removeEventListener('keydown', onPopupSuccesEscKeydown);
   }
 };
-const closePopupSuccesEscClick = (evt) => {
+const onPopupSuccesEscClick = (evt) => {
   evt.preventDefault();
   success.remove();
-  success.removeEventListener('click', closePopupSuccesEscClick);
+  success.removeEventListener('click', onPopupSuccesEscClick);
 };
 const closePopupSuccess = () => {
-  document.addEventListener('keydown', closePopupSuccesEscKeydown);
-  success.addEventListener('click', closePopupSuccesEscClick);
+  document.addEventListener('keydown', onPopupSuccesEscKeydown);
+  success.addEventListener('click', onPopupSuccesEscClick);
 };
 
-const closePopupErrorEscKeydown = (evt) => {
+const onPopupErrorEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
     error.remove();
-    document.removeEventListener('keydown', closePopupErrorEscKeydown);
+    document.removeEventListener('keydown', onPopupErrorEscKeydown);
   }
 };
-const closePopupErrorEscClick = (evt) => {
+const onPopupErrorEscClick = (evt) => {
   evt.preventDefault();
   error.remove();
-  error.removeEventListener('click', closePopupErrorEscClick);
+  error.removeEventListener('click', onPopupErrorEscClick);
 };
-const closePopupErrorEscButtonClick = (evt) => {
+const onPopupErrorEscButtonClick = (evt) => {
   const errorButton = document.querySelector('.error__button');
   evt.preventDefault();
   error.remove();
-  errorButton.removeEventListener('click', closePopupErrorEscButtonClick);
+  errorButton.removeEventListener('click', onPopupErrorEscButtonClick);
 };
 const createErrorMessage = () => {
   const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -126,9 +127,9 @@ const createErrorMessage = () => {
 };
 const closePopupError = () => {
   const errorButton = document.querySelector('.error__button');
-  document.addEventListener('keydown', closePopupErrorEscKeydown);
-  error.addEventListener('click', closePopupErrorEscClick);
-  errorButton.addEventListener('click', closePopupErrorEscButtonClick);
+  document.addEventListener('keydown', onPopupErrorEscKeydown);
+  error.addEventListener('click', onPopupErrorEscClick);
+  errorButton.addEventListener('click', onPopupErrorEscButtonClick);
 };
 
 const onSuccess = () => {
@@ -144,6 +145,7 @@ const onSuccess = () => {
   userPrice.placeholder = userTypeList[userType.value];
   userTimeoutContainer.value = userTimeouts[0].value;
   userTimeinContainer.value = userTimeins[0].value;
+  userComment.value = '';
   featuresCheckboxes.forEach((features) => {
     features.checked = false;
   });
@@ -178,22 +180,21 @@ const resetForm = () => {
   userPrice.placeholder = userTypeList[userType.value];
   userTimeoutContainer.value = userTimeouts[0].value;
   userTimeinContainer.value = userTimeins[0].value;
+  userComment.value = '';
   featuresCheckboxes.forEach((features) => {
     features.checked = false;
   });
+
   mainPinMarker.setLatLng({
     lat: TOKYO_CENTER_LAT,
     lng: TOKYO_CENTER_LNG,
   });
   map.closePopup();
 };
-
-adFormReset.addEventListener('click', (evt) => {
+const onResetFormClick = (evt) => {
   evt.preventDefault();
   resetForm();
-});
-adFormReset.removeEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetForm();
-});
+  adFormReset.removeEventListener('click', onResetFormClick);
+};
+adFormReset.addEventListener('click', onResetFormClick);
 
