@@ -48,7 +48,6 @@ const checkinRooms = () => {
       el.setAttribute('disabled', 'disabled');
       userCapacitys[3].removeAttribute('disabled');
     }
-
   });
 
   if (Number(userRoomNumberContaner.value) < Number(userCapacitysContainer.value)) {
@@ -170,6 +169,7 @@ adForm.addEventListener('submit', (evt) => {
     new FormData(evt.target),
   );
 });
+
 const resetForm = () => {
   userTitle.value = '';
   userAddress.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
@@ -177,7 +177,7 @@ const resetForm = () => {
   userCapacitysContainer.value = userCapacitys[2].value;
   userType.value = userTypes[1].value;
   userPrice.value = '';
-  userPrice.placeholder = userTypeList[userType.value];
+  userPrice.placeholder = userTypeList[userTypes[1].value];
   userTimeoutContainer.value = userTimeouts[0].value;
   userTimeinContainer.value = userTimeins[0].value;
   userComment.value = '';
@@ -194,7 +194,7 @@ const resetForm = () => {
 const onResetFormClick = (evt) => {
   evt.preventDefault();
   resetForm();
-  adFormReset.removeEventListener('click', onResetFormClick);
 };
+
 adFormReset.addEventListener('click', onResetFormClick);
 
