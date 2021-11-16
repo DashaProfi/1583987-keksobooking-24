@@ -12,5 +12,34 @@ function getRandomPositiveFloat(a, b, digits = 1) {
   const result = Math.random() * (upper - lower) + lower;
   return result.toFixed(digits);
 }
+const adForm = document.querySelector('.ad-form');
+const mapFilter = document.querySelector('.map__filters');
 
-export { getRandomPositiveInteger, getRandomPositiveFloat };
+const inactivateAdForm = () => {
+  adForm.classList.add('ad-form--disabled');
+  adForm.querySelectorAll('fieldset').forEach((fieldset) => {
+    fieldset.setAttribute('disabled', 'disabled');
+  });
+};
+
+const inactivateMapFilter = () => {
+  mapFilter.classList.add('.map__filters--disabled');
+  for (let i = 0; i < mapFilter.children.length; i++) {
+    mapFilter.children[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+const activateAdForm = () => {
+  adForm.classList.remove('ad-form--disabled');
+  adForm.querySelectorAll('fieldset').forEach((fieldset) => {
+    fieldset.removeAttribute('disabled');
+  });
+};
+
+const activateMapFilter = () => {
+  mapFilter.classList.remove('.map__filters--disabled');
+  for (let i = 0; i < mapFilter.children.length; i++) {
+    mapFilter.children[i].removeAttribute('disabled');
+  }
+};
+export { getRandomPositiveInteger, getRandomPositiveFloat, inactivateAdForm, inactivateMapFilter, activateAdForm, activateMapFilter };
