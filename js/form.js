@@ -178,6 +178,7 @@ const resetForm = () => {
   userType.value = userTypes[1].value;
   userPrice.value = '';
   userPrice.placeholder = userTypeList[userTypes[1].value];
+  userPrice.min = userTypeList[userTypes[1].value];
   userTimeoutContainer.value = userTimeouts[0].value;
   userTimeinContainer.value = userTimeins[0].value;
   userComment.value = '';
