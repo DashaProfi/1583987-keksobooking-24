@@ -1,9 +1,13 @@
+let cards;
+
 const getData = (onSuccess, onFail) => {
   fetch('https://24.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if (response.ok) {
         response.json()
           .then((announcements) => {
+            cards = announcements;
+            console.log(announcements);
             onSuccess(announcements);
           });
       } else {
@@ -33,4 +37,5 @@ const sendData = (onSuccess, onFail, body) => {
     });
 };
 
-export { getData, sendData };
+
+export { getData, sendData, cards };

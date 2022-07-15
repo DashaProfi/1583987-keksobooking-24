@@ -1,3 +1,5 @@
+const IMAGE_WIDTH = 45;
+const IMAGE_HEIGHT = 40;
 const templateFragment = document.querySelector('#card')
   .content
   .querySelector('.popup');
@@ -62,11 +64,14 @@ const getPopupAnnouncements = (element) => {
       const userImage = document.createElement('img');
       userImage.src = photo;
       userImage.classList.add('popup__photo');
-      userImage.width = '45';
-      userImage.height = '40';
+      userImage.width = IMAGE_WIDTH;
+      userImage.height = IMAGE_HEIGHT;
       userImage.alt = 'Фотография жилья';
       popupPhotosContaner.appendChild(userImage);
     });
+  }
+  if (!element.offer.photos) {
+    popupPhotosContaner.remove();
   }
   return announcementElement;
 };

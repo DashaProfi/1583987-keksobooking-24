@@ -1,27 +1,28 @@
-import { sendData } from './api.js';
-import { mainPinMarker, map, TOKYO_CENTER_LAT, TOKYO_CENTER_LNG } from './map.js';
+import {sendData} from './api.js';
+import {mainPinMarker, map, TOKYO_CENTER_LAT, TOKYO_CENTER_LNG} from './map.js';
+
+const MAX_ROOM_NUMBER = 100;
+const MIN_ROOM_NUMBER = 0;
 
 const userPrice = document.querySelector('#price'),
   userType = document.querySelector('#type'),
-  userTypes = document.querySelectorAll('#type>option'),
   userRoomNumberContaner = document.querySelector('#room_number'),
-  userRoomNumbers = document.querySelectorAll('#room_number>option'),
   userCapacitysContainer = document.querySelector('#capacity'),
-  userCapacitys = document.querySelectorAll('#capacity>option'),
-  userTitle = document.querySelector('#title');
-const userAddress = document.querySelector('#address');
-const userComment = document.querySelector('#description');
-const MAX_ROOM_NUMBER = 100;
-const MIN_ROOM_NUMBER = 0;
+  userCapacitys = document.querySelectorAll('#capacity>option');
 const adForm = document.querySelector('.ad-form');
 const userTimeinContainer = document.querySelector('#timein');
-const userTimeins = document.querySelectorAll('#timein>option');
 const userTimeoutContainer = document.querySelector('#timeout');
-const userTimeouts = document.querySelectorAll('#timeout>option');
-const featuresCheckboxes = document.querySelectorAll('.features__checkbox');
 const adFormReset = document.querySelector('.ad-form__reset');
+const adFormHeaderPreview = document.querySelector('.ad-form-header__preview img');
+const avatarInput = document.querySelector('#avatar');
+const housingImage = document.querySelector('#images');
+const adFormPhoto = document.querySelector('.ad-form__photo');
+
+const adFormPhotoContainer = document.querySelector('.ad-form__photo-container');
+
 let success;
 let error;
+let containerPhoto;
 
 const userTypeList = {
   bungalow: '0',
@@ -31,21 +32,39 @@ const userTypeList = {
   palace: '10000',
 };
 
-
-userType.addEventListener('change', () => {
-  userPrice.setAttribute('min', userTypeList[userType.value]);
-  userPrice.placeholder = userTypeList[userType.value];
+avatarInput.addEventListener('change', () => {
+  adFormHeaderPreview.src = URL.createObjectURL(avatarInput.files[0]);
 });
 
-const checkinRooms = () => {
+housingImage.addEventListener('change', () => {
+  adFormPhoto.classList.remove('hidden');
+  const array = Array.from(housingImage.files); // housingImage.files
+  array.forEach((photo) => {
+    containerPhoto = adFormPhoto.cloneNode();
+    const userHousingImage = document.createElement('img');
+    userHousingImage.src = URL.createObjectURL(photo);
+    userHousingImage.style.width = '100%';
+    userHousingImage.style.height = '100%';
+    containerPhoto.append(userHousingImage);
+    adFormPhotoContainer.append(containerPhoto);
+  });
+  adFormPhoto.classList.add('hidden');
+});
+
+
+userType.addEventListener('change', () => {
+  userPrice.min = userTypeList[userType.value];
+  userPrice.placeholder = userTypeList[userType.value];
+});
+const checkRoomNumber = () => {
   userCapacitys.forEach((el) => {
     if (Number(el.value) <= Number(userRoomNumberContaner.value) && Number(el.value) !== MIN_ROOM_NUMBER) {
       el.removeAttribute('disabled');
     } else {
-      el.setAttribute('disabled', 'disabled');
+      el.disabled = 'disabled';
     }
     if (Number(userRoomNumberContaner.value) === MAX_ROOM_NUMBER) {
-      el.setAttribute('disabled', 'disabled');
+      el.disabled = 'disabled';
       userCapacitys[3].removeAttribute('disabled');
     }
   });
@@ -56,19 +75,24 @@ const checkinRooms = () => {
     userRoomNumberContaner.setCustomValidity('Выберите 100 комнат');
   } else if (Number(userRoomNumberContaner.value) === MAX_ROOM_NUMBER && Number(userCapacitysContainer.value) !== MIN_ROOM_NUMBER) {
     userRoomNumberContaner.setCustomValidity('100 комнат не для гостей');
-  }
-  else {
+  } else {
     userRoomNumberContaner.setCustomValidity('');
   }
 
   userRoomNumberContaner.reportValidity();
 };
+const onUserRoomNumberContanerChange = () => {
+  checkRoomNumber();
+};
 
-checkinRooms();
+onUserRoomNumberContanerChange();
 
-userRoomNumberContaner.addEventListener('change', checkinRooms);
+const onUserCapacitysContainerChange = () => {
+  checkRoomNumber();
+};
+userRoomNumberContaner.addEventListener('change', onUserRoomNumberContanerChange);
 
-userCapacitysContainer.addEventListener('change', checkinRooms);
+userCapacitysContainer.addEventListener('change', onUserCapacitysContainerChange);
 
 userTimeinContainer.addEventListener('change', () => {
   userTimeoutContainer.value = userTimeinContainer.value;
@@ -83,6 +107,7 @@ const createSucccessMessage = () => {
   const successMessage = successTemplate.cloneNode(true);
   return successMessage;
 };
+
 
 const onPopupSuccesEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
@@ -131,29 +156,30 @@ const closePopupError = () => {
   errorButton.addEventListener('click', onPopupErrorEscButtonClick);
 };
 
-const onSuccess = () => {
-  success = createSucccessMessage();
-  document.body.append(success);
-  closePopupSuccess();
-  userTitle.value = '';
-  userAddress.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
-  userRoomNumberContaner.value = userRoomNumbers[0].value;
-  userCapacitysContainer.value = userCapacitys[2].value;
-  userType.value = userTypes[1].value;
-  userPrice.value = '';
+const resetFormAndMap = () => {
+  adForm.reset();
   userPrice.placeholder = userTypeList[userType.value];
-  userTimeoutContainer.value = userTimeouts[0].value;
-  userTimeinContainer.value = userTimeins[0].value;
-  userComment.value = '';
-  featuresCheckboxes.forEach((features) => {
-    features.checked = false;
-  });
-
   mainPinMarker.setLatLng({
     lat: TOKYO_CENTER_LAT,
     lng: TOKYO_CENTER_LNG,
   });
   map.closePopup();
+  const photoContainer = document.querySelectorAll('.ad-form__photo');
+  photoContainer.forEach((photo) => {
+    if (photo.classList.contains('hidden')) {
+      photo.classList.remove('hidden');
+    } else {
+      photo.remove();
+    }
+  });
+  adFormHeaderPreview.src='img/muffin-grey.svg';
+};
+
+const onSuccess = () => {
+  success = createSucccessMessage();
+  document.body.append(success);
+  closePopupSuccess();
+  resetFormAndMap();
 };
 const onError = () => {
   error = createErrorMessage();
@@ -170,32 +196,9 @@ adForm.addEventListener('submit', (evt) => {
   );
 });
 
-const resetForm = () => {
-  userTitle.value = '';
-  userAddress.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
-  userRoomNumberContaner.value = userRoomNumbers[0].value;
-  userCapacitysContainer.value = userCapacitys[2].value;
-  userType.value = userTypes[1].value;
-  userPrice.value = '';
-  userPrice.placeholder = userTypeList[userTypes[1].value];
-  userPrice.min = userTypeList[userTypes[1].value];
-  userTimeoutContainer.value = userTimeouts[0].value;
-  userTimeinContainer.value = userTimeins[0].value;
-  userComment.value = '';
-  featuresCheckboxes.forEach((features) => {
-    features.checked = false;
-  });
-
-  mainPinMarker.setLatLng({
-    lat: TOKYO_CENTER_LAT,
-    lng: TOKYO_CENTER_LNG,
-  });
-  map.closePopup();
-};
 const onResetFormClick = (evt) => {
   evt.preventDefault();
-  resetForm();
+  resetFormAndMap();
 };
 
 adFormReset.addEventListener('click', onResetFormClick);
-

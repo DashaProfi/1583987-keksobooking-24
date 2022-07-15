@@ -1,31 +1,44 @@
-import { getPopupAnnouncements } from './popup.js';
-import { getData } from './api.js';
-import { activateAdForm, activateMapFilter, inactivateAdForm, inactivateMapFilter } from './util.js';
+import {getPopupAnnouncements} from './popup.js';
+import {getData} from './api.js';
+import {
+  activateInactivateAdForm,
+  activateInactivateMapFilter
+} from './util.js';
+import {getFilteredCards
+} from './filter.js';
+import {
+  MAIN_PIN_ANCHOR_X, MAIN_PIN_ANCHOR_Y,
+  MAIN_PIN_ICON_HEIGHT,
+  MAIN_PIN_ICON_WIDTH, PIN_ANCHOR_X, PIN_ANCHOR_Y, PIN_ICON_HEIGHT, PIN_ICON_WIDTH, SIMILAR_ANNOUNCEMENTS_COUNT, TIME,
+  TOKYO_CENTER_LAT,
+  TOKYO_CENTER_LNG,
+  ZOOM_DEFAULT
+} from './constants.js';
+
 
 const userAddress = document.querySelector('#address');
 
-const TOKYO_CENTER_LAT = 35.6895;
-const TOKYO_CENTER_LNG = 139.6917;
-const MAIN_PIN_ICON_HEIGHT = 52;
-const MAIN_PIN_ICON_WIDTH = 52;
-const MAIN_PIN_ANCHOR_X = 26;
-const MAIN_PIN_ANCHOR_Y = 52;
-const PIN_ICON_HEIGHT = 40;
-const PIN_ICON_WIDTH = 40;
-const PIN_ANCHOR_X = 20;
-const PIN_ANCHOR_Y = 40;
-const ZOOM_DEFAULT = 12;
-const SIMILAR_ANNOUNCEMENTS_COUNT = 10;
+const housingType = document.querySelector('#housing-type');
+const housingPrice = document.querySelector('#housing-price');
+const housingRooms = document.querySelector('#housing-rooms');
+const housingGuests = document.querySelector('#housing-guests');
+const filterDishwasher = document.querySelector('#filter-dishwasher');
+const filterWiFi = document.querySelector('#filter-wifi');
+const filterParking = document.querySelector('#filter-parking');
+const filterWasher = document.querySelector('#filter-washer');
+const filterElevator = document.querySelector('#filter-elevator');
+const filterConditioner = document.querySelector('#filter-conditioner');
 
-inactivateAdForm();
-inactivateMapFilter();
+let timer;
+
+activateInactivateAdForm('true');
+activateInactivateMapFilter('true');
 
 userAddress.value = `${TOKYO_CENTER_LAT}, ${TOKYO_CENTER_LNG}`;
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    activateAdForm();
-    activateMapFilter();
+    activateInactivateAdForm('false');
   })
   .setView({
     lat: TOKYO_CENTER_LAT,
@@ -35,7 +48,7 @@ const map = L.map('map-canvas')
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>',
+    attribution: '&copy; <a href="https://www.openstreetmap1.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>',
   },
 ).addTo(map);
 
@@ -63,6 +76,7 @@ mainPinMarker.on('moveend', (evt) => {
   userAddress.value = `${userLocation.lat.toFixed(5)}, ${userLocation.lng.toFixed(5)}`;
 });
 
+const markerGroup = L.layerGroup().addTo(map);
 
 const onSuccess = (announcements) => {
   announcements.slice(0, SIMILAR_ANNOUNCEMENTS_COUNT).forEach((card) => {
@@ -82,10 +96,10 @@ const onSuccess = (announcements) => {
       },
     );
     marker
-      .addTo(map)
+      .addTo(markerGroup)
       .bindPopup(getPopupAnnouncements(card));
   });
-
+  activateInactivateMapFilter('false');
 };
 
 const div = document.createElement('div');
@@ -116,6 +130,22 @@ color: #ffffff;
 font - size: 50px;
 font - weight: 700;
 `;
+
+function getTimeOut() {
+  clearTimeout(timer);
+  timer = setTimeout(getFilteredCards, TIME);
+}
+housingType.addEventListener('change', getTimeOut);
+housingPrice.addEventListener('change', getTimeOut);
+housingRooms.addEventListener('change', getTimeOut);
+housingGuests.addEventListener('change', getTimeOut);
+filterDishwasher.addEventListener('change', getTimeOut);
+filterWiFi.addEventListener('change', getTimeOut);
+filterParking.addEventListener('change', getTimeOut);
+filterWasher.addEventListener('change', getTimeOut);
+filterElevator.addEventListener('change', getTimeOut);
+filterConditioner.addEventListener('change', getTimeOut);
+
 const closePopup = () => {
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
@@ -128,7 +158,6 @@ const closePopup = () => {
     div.remove();
   });
 };
-
 const onFail = () => {
   document.body.prepend(div);
   closePopup();
@@ -136,4 +165,17 @@ const onFail = () => {
 
 getData(onSuccess, onFail);
 
-export { mainPinMarker, map, TOKYO_CENTER_LAT, TOKYO_CENTER_LNG };
+export {
+  mainPinMarker, map, TOKYO_CENTER_LAT, TOKYO_CENTER_LNG, filterConditioner,
+  housingRooms,
+  housingType,
+  housingPrice,
+  housingGuests,
+  filterDishwasher,
+  filterWasher,
+  filterWiFi,
+  filterParking,
+  filterElevator,
+  onSuccess,
+  markerGroup
+};
